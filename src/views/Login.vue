@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import AuthLayout from '../components/AuthLayout.vue'
 import { login } from '../api/user';
+import { TOKEN_KEY } from '../utils/request';
+const router = useRouter()
 const username = ref('')
 const password = ref('')
 const user = ref({
@@ -11,8 +14,14 @@ const user = ref({
 async function loginsubmit() {
   user.username = username.value
   user.password = password.value
-  const result =await login(user)
-  console.log(result)
+  try {
+    const result = await login(user)
+    console.log(result)
+    localStorage.setItem(TOKEN_KEY, result.token)
+    router.replace('/home')
+  } catch (e) {
+    alert(e.message || '登录失败')
+  }
 }
 </script>
 

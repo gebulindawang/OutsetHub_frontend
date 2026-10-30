@@ -1,10 +1,24 @@
 <script setup>
+import { ref } from 'vue';
 import AuthLayout from '../components/AuthLayout.vue'
+import { register } from '../api/user.js';
+import { useRouter } from 'vue-router';
+const user = ref({
+  'username':'',
+  'password':'',
+  'nickname':'',
+})
+const router = useRouter()
+async function registersubmit() {
+  const result = await register(user.value)
+  alert("注册成功，请登录")
+  router.replace("/login")
+}
 </script>
 
 <template>
   <AuthLayout title="创建账号" subtitle="加入起点社区,开启你的旅程">
-    <form class="form" novalidate>
+    <form class="form" novalidate @submit.prevent="registersubmit">
       <div class="field">
         <label for="username">用户名</label>
         <input
@@ -13,18 +27,19 @@ import AuthLayout from '../components/AuthLayout.vue'
           type="text"
           placeholder="请输入用户名"
           autocomplete="username"
+          v-model="user.username"
         />
         <p class="error" hidden></p>
       </div>
-
-      <div class="field">
-        <label for="email">邮箱</label>
+<div class="field">
+        <label for="nickname">昵称</label>
         <input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="请输入邮箱"
-          autocomplete="email"
+          id="nickname"
+          name="nickname"
+          type="nickname"
+          placeholder="请输入昵称"
+          autocomplete="nickname"
+          v-model="user.nickname"
         />
         <p class="error" hidden></p>
       </div>
@@ -37,6 +52,7 @@ import AuthLayout from '../components/AuthLayout.vue'
           type="password"
           placeholder="请输入密码"
           autocomplete="new-password"
+          v-model="user.password"
         />
         <p class="error" hidden></p>
       </div>
