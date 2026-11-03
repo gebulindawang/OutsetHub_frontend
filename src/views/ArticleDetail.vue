@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import AppModal from '../components/AppModal.vue'
+import CommentSection from '../components/CommentSection.vue'
 import EmptyState from '../components/EmptyState.vue'
 import { getArticle, removeArticle } from '../api/article'
 import { listCategories } from '../api/category'
@@ -149,6 +150,12 @@ watch(() => route.params.id, load)
           </div>
         </footer>
       </article>
+
+      <CommentSection
+        v-if="!loading && !loadError && article && !isRemoved"
+        :article-id="article.id"
+        class="comment-block"
+      />
     </div>
 
     <AppModal v-model="confirmOpen" title="删除这篇文章?">
@@ -194,6 +201,11 @@ watch(() => route.params.id, load)
   max-width: 780px;
   margin: 0 auto;
   padding: 40px 48px 28px;
+}
+
+.comment-block {
+  max-width: 780px;
+  margin: 16px auto 0;
 }
 
 .draft-flag {
